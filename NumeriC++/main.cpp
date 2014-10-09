@@ -10,55 +10,15 @@
 #include <vector>
 #include <numeric>
 #include <math.h>
+#include "Vector.h"
 
 using namespace std;
-
-const double epsilon = 1e-8;
-const double ro = 0.9;
+const double epsilon = 1e-12;
+const double ro = 0.5;
 const double c = 1e-4;
 
-vector<double> operator-(const vector<double>& v) {
-    vector<double> result (v.size());
-    transform(v.begin(), v.end(), result.begin(),
-              [](double d) {
-                  return -d;
-              });
-    return result;
-}
 
-vector<double> operator-(const vector<double>& v1, const vector<double>& v2) {
-    vector<double> result (v1.size());
-    transform(v1.begin(), v1.end(), v2.begin(), result.begin(),
-              [](double a, double b) {
-                  return a-b;
-              });
-    return result;
-}
-
-vector<double> operator+(const vector<double>& v1, const vector<double>& v2) {
-    vector<double> result (v1.size());
-    transform(v1.begin(), v1.end(), v2.begin(), result.begin(),
-              [](double a, double b) {
-                  return a+b;
-              });
-    return result;
-}
-
-vector<double> operator*(double s, const vector<double>& v) {
-    vector<double> result (v.size());
-    transform(v.begin(), v.end(), result.begin(),
-              [&](double a) {
-                  return s*a;
-              });
-    return result;
-}
-
-double operator*(const vector<double>& v1, const vector<double>& v2) {
-    return inner_product(begin(v1), end(v1), begin(v2), 0.0);
-}
-
-
-vector<double> grad(double (*f)(const vector<double>&), const vector<double>& x) {
+Vector grad(double (*f)(const Vector&), const Vector& x) {
     double x1 = x[0];
     double x2 = x[1];
     
@@ -69,7 +29,7 @@ vector<double> grad(double (*f)(const vector<double>&), const vector<double>& x)
 }
 
 // Make it lambda.
-double f(const vector<double>& x) {
+double f(const Vector& x) {
     double x1 = x[0];
     double x2 = x[1];
     
@@ -77,8 +37,8 @@ double f(const vector<double>& x) {
 }
 
 int main(int argc, const char * argv[]) {
-    vector<double> x = { -1.2, 1.0 };
-    auto p = [](vector<double> x) { return -grad(&f, x); };
+    Vector x = { -1.2, 1.0 };
+    auto p = [](Vector x) { return -grad(&f, x); };
     
     double alpha = 1;
     do {
