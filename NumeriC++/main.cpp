@@ -76,17 +76,6 @@ double f(const vector<double>& x) {
     return 100*pow((x2 - pow(x1,2.0)),2) + pow((1 - x1),2);
 }
 
-
-double dotProd(const vector<double>& v1, const vector<double>& v2) {
-    return inner_product(begin(v1), end(v1), begin(v2), 0.0);
-}
-
-vector<double> scalProd(double& s, vector<double>& v) {
-    transform(v.begin(), v.end(), v.begin(),
-              std::bind1st(std::multiplies<double>(), s));
-    return v;
-}
-
 int main(int argc, const char * argv[]) {
     vector<double> x = { -1.2, 1.0 };
     auto p = [](vector<double> x) { return -grad(&f, x); };
